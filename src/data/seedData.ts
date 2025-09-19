@@ -966,11 +966,17 @@ const createAssessment = (
 
 export const seedDatabase = async () => {
   try {
-    // Clear existing data
-    await db.jobs.clear();
-    await db.candidates.clear();
-    await db.assessments.clear();
-    await db.assessmentResponses.clear();
+    // Check if database already has data
+    const existingJobs = await db.jobs.count();
+    const existingCandidates = await db.candidates.count();
+    
+    // Only seed if database is empty
+    if (existingJobs > 0 || existingCandidates > 0) {
+      console.log("Database already has data, skipping seed");
+      return;
+    }
+
+    console.log("Database is empty, seeding with sample data...");
 
     // Seed jobs
     const now = new Date().toISOString();
@@ -1015,6 +1021,26 @@ export const seedDatabase = async () => {
     console.log("Database seeding completed successfully");
   } catch (error) {
     console.error("Error seeding database:", error);
+    throw error;
+  }
+};
+
+// Function to manually clear database and reseed (for testing purposes)
+export const resetDatabase = async () => {
+  try {
+    console.log("Clearing database and reseeding...");
+    await db.jobs.clear();
+    await db.candidates.clear();
+    await db.assessments.clear();
+    await db.assessmentResponses.clear();
+    await db.candidateTimeline.clear();
+    await db.notes.clear();
+    
+    // Now seed fresh data
+    await seedDatabase();
+    console.log("Database reset and reseeded successfully");
+  } catch (error) {
+    console.error("Error resetting database:", error);
     throw error;
   }
 };
