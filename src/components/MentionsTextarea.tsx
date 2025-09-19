@@ -1,5 +1,4 @@
 import React, { useState, useRef, useCallback } from "react";
-import { UserIcon } from "@heroicons/react/24/outline";
 
 interface Mention {
   id: string;
