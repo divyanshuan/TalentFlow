@@ -2,6 +2,15 @@
 
 A modern, intuitive talent acquisition platform built with React and TypeScript. TalentFlow streamlines your entire hiring process from job posting to candidate assessment, making it easier than ever to find and hire the right talent.
 
+## 🌐 Live Demo
+
+**Try TalentFlow right now!** The project is live and ready to use:
+
+- **Primary URL:** [https://inquisitive-sopapillas-5f6c8f.netlify.app/jobs](https://inquisitive-sopapillas-5f6c8f.netlify.app/jobs)
+- **Custom Domain:** [https://divyanshuverma.dev/jobs](https://divyanshuverma.dev/jobs)
+
+*Note: The application uses IndexedDB for data storage, so your data will persist across sessions. Feel free to create jobs, add candidates, and explore all the features!*
+
 ## 🌟 What Makes TalentFlow Special?
 
 TalentFlow isn't just another ATS (Applicant Tracking System) - it's a comprehensive hiring solution that grows with your team. Whether you're a startup looking to hire your first employees or an enterprise managing hundreds of positions, TalentFlow adapts to your needs.
