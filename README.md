@@ -1,4 +1,5 @@
 # TalentFlow 🚀
+
 ## Assignment Submission - Modern ATS (Applicant Tracking System)
 
 A comprehensive talent acquisition platform built with React and TypeScript as part of a technical assignment. TalentFlow demonstrates modern web development practices while providing a fully functional ATS solution that streamlines the entire hiring process from job posting to candidate assessment.
@@ -7,8 +8,8 @@ A comprehensive talent acquisition platform built with React and TypeScript as p
 
 **Experience the application:** The project is deployed and ready for evaluation:
 
-- **Primary URL:** [https://inquisitive-sopapillas-5f6c8f.netlify.app/jobs](https://inquisitive-sopapillas-5f6c8f.netlify.app/jobs)
-- **Custom Domain:** [https://divyanshuverma.dev/jobs](https://divyanshuverma.dev/jobs)
+- **Primary URL:** [https://inquisitive-sopapillas-5f6c8f.netlify.app](https://inquisitive-sopapillas-5f6c8f.netlify.app/)
+- **Custom Domain:** [https://divyanshuverma.dev](https://divyanshuverma.dev/)
 
 _Note: The application uses IndexedDB for data storage, so your data will persist across sessions. Please feel free to create jobs, add candidates, and explore all the features to evaluate the functionality._
 
@@ -17,6 +18,7 @@ _Note: The application uses IndexedDB for data storage, so your data will persis
 This project demonstrates proficiency in modern web development technologies and best practices:
 
 ### **Core Technical Skills Demonstrated:**
+
 - **React 19** with TypeScript for type-safe development
 - **Modern React Patterns** - Hooks, Context, Custom Hooks
 - **State Management** - React Query for server state, local state management
@@ -28,6 +30,7 @@ This project demonstrates proficiency in modern web development technologies and
 - **Routing** - React Router for single-page application navigation
 
 ### **Key Features Implemented:**
+
 - Complete CRUD operations for jobs and candidates
 - Real-time drag-and-drop pipeline management
 - Custom assessment builder with multiple question types
@@ -56,9 +59,10 @@ TalentFlow isn't just another ATS (Applicant Tracking System) - it's a comprehen
 **Technology Stack:** React 19, TypeScript, Tailwind CSS, IndexedDB  
 **Deployment:** Netlify (Primary) + Custom Domain  
 **Repository:** GitHub with comprehensive documentation  
-**Demo Data:** Pre-loaded with 25+ jobs and 1000+ candidates for testing  
+**Demo Data:** Pre-loaded with 25+ jobs and 1000+ candidates for testing
 
 ### **Evaluation-Ready Features:**
+
 - ✅ **Complete User Interface** - All pages and components functional
 - ✅ **Responsive Design** - Works on desktop, tablet, and mobile
 - ✅ **Data Persistence** - All changes saved locally
