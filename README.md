@@ -114,6 +114,10 @@ npm run build
 
 This creates an optimized production build in the `build` folder, ready to be deployed to any static hosting service.
 
+### Netlify Deployment Fix
+
+If you encounter "Page not found" errors when refreshing on client-side routes, the `_redirects` file in the `public` folder ensures all routes are properly handled by React Router.
+
 ## 🎯 How TalentFlow Works
 
 ### The Complete Hiring Journey
