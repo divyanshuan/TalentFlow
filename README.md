@@ -39,6 +39,278 @@ This project demonstrates proficiency in modern web development technologies and
 - Responsive design across all devices
 - Offline-first architecture with data persistence
 
+## 🏗️ Architecture Overview
+
+### **System Architecture**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    TalentFlow Frontend                      │
+├─────────────────────────────────────────────────────────────┤
+│  React 19 + TypeScript + Tailwind CSS                     │
+├─────────────────────────────────────────────────────────────┤
+│  Component Layer                                           │
+│  ├── Pages (Jobs, Candidates, Kanban, Assessments)        │
+│  ├── Components (JobCard, KanbanBoard, NotesPanel)        │
+│  └── Layout (Navigation, Responsive Design)               │
+├─────────────────────────────────────────────────────────────┤
+│  State Management Layer                                    │
+│  ├── React Query (Server State)                           │
+│  ├── React Hooks (Local State)                            │
+│  └── Custom Hooks (Business Logic)                        │
+├─────────────────────────────────────────────────────────────┤
+│  Data Layer                                                │
+│  ├── API Service (Simulated Network Layer)                │
+│  ├── IndexedDB (Dexie.js) - Local Persistence             │
+│  └── Seed Data (Initial Sample Data)                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### **Data Flow Architecture**
+
+1. **Initialization**: App loads → Check IndexedDB → Seed if empty → Render UI
+2. **User Actions**: UI Event → API Service → IndexedDB Write → State Update → UI Re-render
+3. **Data Persistence**: All changes immediately written to IndexedDB
+4. **State Restoration**: On refresh, data loads from IndexedDB (no reseeding)
+
+### **Component Architecture**
+
+```
+App
+├── Layout (Navigation, Sidebar)
+├── Routes
+│   ├── JobsPage
+│   │   ├── JobCard (Individual Job Display)
+│   │   ├── JobModal (Create/Edit Jobs)
+│   │   └── Pagination
+│   ├── CandidatesPage
+│   │   ├── CandidateCard
+│   │   └── CandidateFilters
+│   ├── KanbanPage
+│   │   └── KanbanBoard (Drag & Drop)
+│   ├── AssessmentBuilderPage
+│   │   └── AssessmentForm
+│   └── CandidateDetailPage
+│       ├── NotesPanel (Mentions System)
+│       └── TimelineView
+```
+
+## 🔧 Technical Decisions & Rationale
+
+### **1. Frontend Framework: React 19 + TypeScript**
+
+**Decision**: Use React 19 with TypeScript for type safety and modern features.
+
+**Rationale**:
+- **Type Safety**: Prevents runtime errors and improves developer experience
+- **Modern React**: Concurrent features, improved performance
+- **Ecosystem**: Rich library ecosystem and community support
+- **Maintainability**: Easier to refactor and scale
+
+### **2. State Management: React Query + Local State**
+
+**Decision**: React Query for server state, React hooks for local state.
+
+**Rationale**:
+- **Separation of Concerns**: Clear distinction between server and local state
+- **Caching**: Automatic background updates and caching
+- **Optimistic Updates**: Better UX with immediate feedback
+- **DevTools**: Excellent debugging capabilities
+
+### **3. Local Persistence: IndexedDB via Dexie.js**
+
+**Decision**: Use IndexedDB with Dexie.js wrapper for local data storage.
+
+**Rationale**:
+- **Assignment Requirement**: Must use local persistence
+- **Performance**: Faster than localStorage for large datasets
+- **Offline Support**: Works without internet connection
+- **Structured Data**: Better than key-value storage for complex data
+- **Dexie Benefits**: Promise-based API, transactions, indexing
+
+### **4. Styling: Tailwind CSS**
+
+**Decision**: Use Tailwind CSS for utility-first styling.
+
+**Rationale**:
+- **Rapid Development**: Faster styling with utility classes
+- **Consistency**: Design system built-in
+- **Responsive**: Mobile-first approach
+- **Performance**: Only used classes are included in build
+- **Maintainability**: No CSS conflicts or specificity issues
+
+### **5. Drag & Drop: @dnd-kit**
+
+**Decision**: Use @dnd-kit for Kanban board drag and drop functionality.
+
+**Rationale**:
+- **Accessibility**: Built-in keyboard navigation and screen reader support
+- **Performance**: Optimized for large lists
+- **Flexibility**: Customizable behavior and styling
+- **Modern**: Built for React 18+ with concurrent features
+
+### **6. Form Handling: React Hook Form + Yup**
+
+**Decision**: Use React Hook Form with Yup validation.
+
+**Rationale**:
+- **Performance**: Minimal re-renders
+- **Validation**: Schema-based validation with Yup
+- **Developer Experience**: Simple API and good TypeScript support
+- **Bundle Size**: Lightweight compared to Formik
+
+### **7. Routing: React Router v7**
+
+**Decision**: Use React Router for client-side routing.
+
+**Rationale**:
+- **SPA Requirements**: Single Page Application navigation
+- **Nested Routes**: Complex routing structure support
+- **History API**: Proper browser history management
+- **Code Splitting**: Lazy loading capabilities
+
+## 🐛 Issues Encountered & Solutions
+
+### **1. SPA Routing on Netlify (404 on Refresh)**
+
+**Issue**: Client-side routes return 404 when refreshed directly.
+
+**Root Cause**: Netlify doesn't know how to handle client-side routes.
+
+**Solution**:
+```toml
+# netlify.toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+**Files Added**:
+- `public/_redirects`
+- `netlify.toml`
+
+### **2. Data Loss on Refresh (Reseeding Issue)**
+
+**Issue**: App was clearing user data and reseeding on every refresh.
+
+**Root Cause**: `seedDatabase()` was called on every app initialization.
+
+**Solution**:
+```typescript
+export const seedDatabase = async () => {
+  // Check if database already has data
+  const existingJobs = await db.jobs.count();
+  const existingCandidates = await db.candidates.count();
+  
+  // Only seed if database is empty
+  if (existingJobs > 0 || existingCandidates > 0) {
+    console.log("Database already has data, skipping seed");
+    return;
+  }
+  // ... seed only if empty
+};
+```
+
+### **3. React 19 + React Scripts Compatibility**
+
+**Issue**: Import/export errors with React 19 and older React Scripts.
+
+**Root Cause**: Version compatibility issues between React 19 and React Scripts 5.0.1.
+
+**Solution**:
+- Clean reinstall of node_modules
+- Fresh package-lock.json
+- Verified all imports work correctly
+
+### **4. TypeScript Strict Mode Issues**
+
+**Issue**: TypeScript errors with strict null checks and type assertions.
+
+**Solution**:
+- Added proper type guards
+- Used optional chaining (`?.`)
+- Implemented proper error boundaries
+- Added null checks for API responses
+
+### **5. IndexedDB Transaction Errors**
+
+**Issue**: Race conditions when multiple operations tried to access IndexedDB simultaneously.
+
+**Solution**:
+```typescript
+await db.transaction('rw', [db.jobs, db.candidates], async () => {
+  // Atomic operations within transaction
+});
+```
+
+## 🚀 Performance Optimizations
+
+### **1. React Query Configuration**
+```typescript
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+    },
+  },
+});
+```
+
+### **2. Component Memoization**
+- Used `React.memo` for expensive components
+- Implemented `useMemo` for computed values
+- Used `useCallback` for event handlers
+
+### **3. Lazy Loading**
+- Code splitting with React.lazy
+- Route-based lazy loading
+- Dynamic imports for heavy components
+
+### **4. IndexedDB Indexing**
+```typescript
+this.version(1).stores({
+  jobs: "id, title, slug, status, order, createdAt, updatedAt",
+  candidates: "id, name, email, stage, jobId, createdAt, updatedAt",
+  // Proper indexing for fast queries
+});
+```
+
+## 🔒 Security Considerations
+
+### **1. Input Validation**
+- Client-side validation with Yup schemas
+- XSS prevention with proper escaping
+- Input sanitization for user-generated content
+
+### **2. Data Privacy**
+- All data stored locally (IndexedDB)
+- No external API calls
+- No data transmission to third parties
+
+### **3. Error Handling**
+- Graceful error boundaries
+- User-friendly error messages
+- No sensitive information in console logs
+
+## 📊 Testing Strategy
+
+### **1. Manual Testing**
+- Cross-browser compatibility (Chrome, Firefox, Safari)
+- Mobile responsiveness testing
+- Accessibility testing with screen readers
+
+### **2. Data Integrity Testing**
+- IndexedDB persistence verification
+- State restoration testing
+- Error handling validation
+
+### **3. Performance Testing**
+- Large dataset handling (1000+ candidates)
+- Memory usage monitoring
+- Bundle size optimization
+
 ## 🌟 What Makes TalentFlow Special?
 
 TalentFlow isn't just another ATS (Applicant Tracking System) - it's a comprehensive hiring solution that grows with your team. Whether you're a startup looking to hire your first employees or an enterprise managing hundreds of positions, TalentFlow adapts to your needs.
